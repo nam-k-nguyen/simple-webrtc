@@ -16,7 +16,11 @@ const peers = {}
 myPeer.on('open', userId => {
     myId = userId
     mediaStreaming()
-    socket.emit('join-room', userId)
+    socket.emit(
+        'join-room', 
+        1,
+        userId,
+    )
 })
 
 function mediaStreaming() {
@@ -30,17 +34,10 @@ function mediaStreaming() {
         call.answer(myStream)
         const existingUserVideo = createVid()
         call.on('stream', existingUserStream => {
-            if (!peers[call.peer]) {
-                addVideoStream(existingUserVideo, existingUserStream, call.peer)
-            }
-            peers[call.peer] = {
-                video: existingUserVideo,
-                call: call
-            }
+            if (!peers[call.peer]) {addVideoStream(existingUserVideo, existingUserStream, call.peer)}
+            peers[call.peer] = {video: existingUserVideo,call: call}
         })
-        call.on('close', () => {
-            existingUserVideo.remove()
-        })
+        call.on('close', () => {existingUserVideo.remove()})
     })
 
     socket.on('user-connected', connectedUserId => {
