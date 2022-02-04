@@ -2,12 +2,10 @@ const socket = io()
 const myPeer = new Peer(undefined, {
     host: "0.peerjs.com",
     port: "443",
-    debug: 1
+    debug: 3
 })
 
-let myName
-let myId
-let myStream
+let myName, myId, myStream
 const videoGrid = document.querySelector('#video-grid')
 const userVideo = createVid(); userVideo.muted = true
 const videoList = []
@@ -16,11 +14,7 @@ const peers = {}
 myPeer.on('open', userId => {
     myId = userId
     mediaStreaming()
-    socket.emit(
-        'join-room', 
-        1,
-        userId,
-    )
+    socket.emit('join-room', 1, userId)
 })
 
 function mediaStreaming() {
@@ -29,7 +23,6 @@ function mediaStreaming() {
         myStream = stream
         addVideoStream(userVideo, stream, myId)
     })
-
     myPeer.on('call', call => {
         call.answer(myStream)
         const existingUserVideo = createVid()
@@ -39,11 +32,9 @@ function mediaStreaming() {
         })
         call.on('close', () => {existingUserVideo.remove()})
     })
-
     socket.on('user-connected', connectedUserId => {
         const call = myPeer.call(connectedUserId, myStream)
         const connectedUserVideo = createVid()
-
         call.on('stream', connectedUserStream => {
             if (!peers[connectedUserId]) {
                 addVideoStream(connectedUserVideo, connectedUserStream, connectedUserId)
@@ -53,7 +44,6 @@ function mediaStreaming() {
                 call: call
             }
         })
-
         call.on('close', () => {
             connectedUserVideo.remove()
         })
