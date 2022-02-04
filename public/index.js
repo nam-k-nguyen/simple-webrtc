@@ -16,7 +16,7 @@ const peers = {}
 myPeer.on('open', userId => {
     myId = userId
     mediaStreaming()
-    socket.emit('join-room', 1, userId)
+    socket.emit('join-room', userId)
 })
 
 function mediaStreaming() {
