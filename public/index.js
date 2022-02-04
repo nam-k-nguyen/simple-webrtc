@@ -1,4 +1,4 @@
-const socket = io('/')
+const socket = io()
 const myPeer = new Peer(undefined, {
     host: "0.peerjs.com",
     port: "443",
@@ -66,13 +66,11 @@ socket.on('user-disconnected', userId => {
         delete peers[userId]
     }
 })
-
 function addVideoStream(video, stream, id) {
     video.addEventListener('loadedmetadata', () => video.play())
     video.srcObject = stream
     video.setAttribute('id', id)
     addToGrid(video)
 }
-
 function createVid() { return document.createElement('video') }
 function addToGrid(el) { videoGrid.appendChild(el) }
