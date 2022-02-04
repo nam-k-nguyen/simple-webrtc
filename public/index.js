@@ -1,7 +1,8 @@
 const socket = io('/')
 const myPeer = new Peer(undefined, {
     host: "0.peerjs.com",
-    port: "443"
+    port: "443",
+    debug: 1
 })
 
 let myName
@@ -47,7 +48,6 @@ function mediaStreaming() {
         const connectedUserVideo = createVid()
 
         call.on('stream', connectedUserStream => {
-            console.log('Stream received from another user')
             if (!peers[connectedUserId]) {
                 addVideoStream(connectedUserVideo, connectedUserStream, connectedUserId)
             }
@@ -58,7 +58,6 @@ function mediaStreaming() {
         })
 
         call.on('close', () => {
-            console.log('Remove connected user video')
             connectedUserVideo.remove()
         })
     })

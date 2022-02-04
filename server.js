@@ -10,11 +10,10 @@ app.use(express.static(path.join(__dirname, 'public')))
 app.get('/', (req, res) => {res.render('index.ejs')})
 
 io.on('connection', socket => {
-    socket.on('join-room', (roomId, userId) => {
-        socket.join(roomId)
-        socket.to(roomId).emit('user-connected', userId)
+    socket.on('join-room', (userId) => {
+        socket.emit('user-connected', userId)
         socket.on('disconnect', () => {
-            socket.to(roomId).emit('user-disconnected', userId)
+            socket.emit('user-disconnected', userId)
         })
     })
 })
