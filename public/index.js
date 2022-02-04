@@ -64,6 +64,13 @@ function mediaStreaming() {
     })
 }
 
+socket.on('user-disconnected', userId => {
+    if (peers[userId]) {
+        peers[userId].call.close()
+        delete peers[userId]
+    }
+})
+
 function addVideoStream(video, stream, id) {
     video.addEventListener('loadedmetadata', () => video.play())
     video.srcObject = stream
