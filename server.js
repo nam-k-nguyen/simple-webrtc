@@ -4,6 +4,10 @@ const server = require('http').Server(app)
 const io = require('socket.io')(server)
 const path = require('path')
 
+const roomList = {
+    // 'roomid1': ['userid1', 'userid2']
+}
+
 app.set('view engine', 'ejs')
 app.use(express.static(path.join(__dirname, 'public')))
 
@@ -13,9 +17,7 @@ io.on('connection', socket => {
     socket.on('join-room', (roomId, userId) => {
         socket.join(roomId)
         socket.to(roomId).emit('user-connected', userId)
-        socket.on('disconnect', () => {
-            socket.to(roomId).emit('user-disconnected', userId)
-        })
+        socket.on('disconnect', () => {socket.to(roomId).emit('user-disconnected', userId)})
     })
 })
 
