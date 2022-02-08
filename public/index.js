@@ -88,7 +88,7 @@ socket.on('user-disconnected', userId => {
 })
 
 function addVideoStream(video, stream, id) {
-    video.addEventListener('loadedmetadata', () => video.play())
+    // video.addEventListener('loadedmetadata', () => video.play())
     video.srcObject = stream
     video.setAttribute('id', id)
     addToGrid(video)
