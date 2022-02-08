@@ -3,7 +3,7 @@ const myPeer = new Peer({
     host: "0.peerjs.com",
     port: "443",
     secure: true,
-    debug: 2,
+    debug: 2, /*
     config: {
         'iceServers': [
             { url: 'stun:stun.l.google.com:19302' },
@@ -37,7 +37,7 @@ const myPeer = new Peer({
                 username: 'webrtc'
             }
         ]
-    },
+    }, */
 })
 
 // Global variables 
