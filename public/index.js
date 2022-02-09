@@ -2,7 +2,7 @@ const socket = io("/")
 const myPeer = new Peer({
     host: "0.peerjs.com",
     port: "443",
-    secure: true,
+    // secure: true,
     debug: 2, /*
     config: {
         'iceServers': [
