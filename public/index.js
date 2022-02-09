@@ -87,16 +87,15 @@ socket.on('user-connected', connectedUserId => {
     log('User ' + connectedUserId + ' connected')
     const connectedUserVideo = createVid()
     log('Create video element for user who just connected')
-    const call = myPeer.call(connectedUserId, myStream, () => {
-        call.on('stream', connectedUserStream => {
-            log('Stream received from connected user')
-            addVideoStream(connectedUserVideo, connectedUserStream, connectedUserId)
-            log('Added stream of the user who just connected to the screen')
-            peers[connectedUserId] = { video: connectedUserVideo, call: call }
-            log('Store id of user just connected to peers list')
-        })
-    })
+    const call = myPeer.call(connectedUserId, myStream)
     log('Called user who just connected')
+    call.on('stream', connectedUserStream => {
+        log('Stream received from connected user')
+        addVideoStream(connectedUserVideo, connectedUserStream, connectedUserId)
+        log('Added stream of the user who just connected to the screen')
+        peers[connectedUserId] = { video: connectedUserVideo, call: call }
+        log('Store id of user just connected to peers list')
+    })
     call.on('close', () => { connectedUserVideo.remove(); log('close call with another user of id ' + connectedUserId) })
 })
 
