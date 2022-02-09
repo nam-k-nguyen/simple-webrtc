@@ -66,7 +66,7 @@ myPeer.on('open', userId => {
 myPeer.on('call', call => {
     log('Called by another user`')
     call.answer(myStream)
-    log('Answered the call with our own stream with our stream of ID ' + myStream.id)
+    log('Answered the call with our own stream: ' + myStream)
     const existingUserVideo = createVid()
     log('Create video element to store existing user\'s video')
     const existingUserId = call.peer
