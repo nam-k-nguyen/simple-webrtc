@@ -53,19 +53,14 @@ myPeer.on('open', userId => {
     log('Peer opened with ID: ' + userId)
     myId = userId
     log('Set myId = userId = ' + userId)
-    // navigator.mediaDevices.getUserMedia({ video: true, audio: true }).then(stream => {
-    //     myStream = stream
-    //     log('Got our video stream')
-    //     addVideoStream(userVideo, stream, myId)
-    //     log('Added our video stream to screen')
-    // })
-    var stream = navigator.mediaDevices.getUserMedia({ video: true, audio: true })
-    myStream = stream
-    log('Got our video stream')
-    addVideoStream(userVideo, stream, myId)
-    log('Added our video stream to screen')
-    socket.emit('join-room', 1, userId) // this executes befoer get user media no matter what happens
-    log('Emitted join-room to server')
+    navigator.mediaDevices.getUserMedia({ video: true, audio: true }).then(stream => {
+        myStream = stream
+        log('Got our video stream')
+        addVideoStream(userVideo, stream, myId)
+        log('Added our video stream to screen')
+        socket.emit('join-room', 1, userId) // this executes befoer get user media no matter what happens
+        log('Emitted join-room to server')
+    })
 })
 
 myPeer.on('call', call => {
