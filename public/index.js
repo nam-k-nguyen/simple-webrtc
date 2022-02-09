@@ -50,40 +50,58 @@ const peers = {}
 
 
 myPeer.on('open', userId => {
+    log('Peer opened with ID: ' + userId)
     myId = userId
+    log('Set myId = userId = ' + userId)
     navigator.mediaDevices.getUserMedia({ video: true, audio: true }).then(stream => {
         myStream = stream
+        log('Got our video stream')
         addVideoStream(userVideo, stream, myId)
+        log('Added our video stream to screen')
     })
     socket.emit('join-room', 1, userId)
+    log('Emitted join-room to server')
 })
 
 myPeer.on('call', call => {
+    log('Called by another user`')
     call.answer(myStream)
+    log('Answered the call with our own stream with our stream of ID ' + myStream.id)
     const existingUserVideo = createVid()
+    log('Create video element to store existing user\'s video')
     const existingUserId = call.peer
+    log('Set existing user id = call.peer = ' + call.peer)
     call.on('stream', existingUserStream => {
+        log('Stream received from another user')
         addVideoStream(existingUserVideo, existingUserStream, existingUserId) 
+        log('Added another user\'s video stream to screen')
         peers[existingUserId] = { video: existingUserVideo, call: call }
+        log('Store existing user id in peers list')
     })
-    call.on('close', () => { existingUserVideo.remove() })
+    call.on('close', () => { existingUserVideo.remove(); log('Close call with existing user of id ' + existingUserId)})
 })
 
 
 
 socket.on('user-connected', connectedUserId => {
-    console.log('User ' + connectedUserId + ' connected')
+    log('User ' + connectedUserId + ' connected')
     const connectedUserVideo = createVid()
+    log('Create video element for user who just connected')
     const call = myPeer.call(connectedUserId, myStream, () => {
         call.on('stream', connectedUserStream => {
+            log('Stream received from connected user')
             addVideoStream(connectedUserVideo, connectedUserStream, connectedUserId)
+            log('Added stream of the user who just connected to the screen')
             peers[connectedUserId] = { video: connectedUserVideo, call: call }
+            log('Store id of user just connected to peers list')
         })
     })
-    call.on('close', () => { connectedUserVideo.remove() })
+    log('Called user who just connected')
+    call.on('close', () => { connectedUserVideo.remove(); log('close call with another user of id ' + connectedUserId) })
 })
 
 socket.on('user-disconnected', userId => {
+    log('a user just disconnected')
     if (peers[userId]) {
         peers[userId].call.close()  // Close call
         delete peers[userId]        // Delete from peers list
@@ -98,3 +116,4 @@ function addVideoStream(video, stream, id) {
 }
 function createVid() { return document.createElement('video') }
 function addToGrid(el) { videoGrid.appendChild(el) }
+function log(a) {console.log(a)}
