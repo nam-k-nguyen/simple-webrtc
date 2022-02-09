@@ -51,11 +51,11 @@ const peers = {}
 
 myPeer.on('open', userId => {
     myId = userId
-    socket.emit('join-room', 1, userId)
     navigator.mediaDevices.getUserMedia({ video: true, audio: true }).then(stream => {
         myStream = stream
         addVideoStream(userVideo, stream, myId)
     })
+    socket.emit('join-room', 1, userId)
 })
 
 myPeer.on('call', call => {
@@ -72,6 +72,7 @@ myPeer.on('call', call => {
 
 
 socket.on('user-connected', connectedUserId => {
+    console.log('user connected')
     const call = myPeer.call(connectedUserId, myStream)
     const connectedUserVideo = createVid()
     call.on('stream', connectedUserStream => {
