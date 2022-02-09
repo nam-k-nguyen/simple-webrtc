@@ -73,11 +73,12 @@ myPeer.on('call', call => {
 
 socket.on('user-connected', connectedUserId => {
     console.log('User ' + connectedUserId + ' connected')
-    const call = myPeer.call(connectedUserId, myStream)
     const connectedUserVideo = createVid()
-    call.on('stream', connectedUserStream => {
-        addVideoStream(connectedUserVideo, connectedUserStream, connectedUserId)
-        peers[connectedUserId] = { video: connectedUserVideo, call: call }
+    const call = myPeer.call(connectedUserId, myStream, () => {
+        call.on('stream', connectedUserStream => {
+            addVideoStream(connectedUserVideo, connectedUserStream, connectedUserId)
+            peers[connectedUserId] = { video: connectedUserVideo, call: call }
+        })
     })
     call.on('close', () => { connectedUserVideo.remove() })
 })
