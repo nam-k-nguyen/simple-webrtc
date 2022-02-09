@@ -72,7 +72,7 @@ myPeer.on('call', call => {
 
 
 socket.on('user-connected', connectedUserId => {
-    console.log('user connected')
+    console.log('User ' + connectedUserId + ' connected')
     const call = myPeer.call(connectedUserId, myStream)
     const connectedUserVideo = createVid()
     call.on('stream', connectedUserStream => {
