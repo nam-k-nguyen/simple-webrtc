@@ -2,7 +2,7 @@ const socket = io("/")
 const myPeer = new Peer({
     host: "0.peerjs.com",
     port: "443",
-    // secure: true,
+    secure: true,
     debug: 2, /*
     config: {
         'iceServers': [
@@ -52,6 +52,7 @@ const peers = {}
 myPeer.on('open', userId => {
     myId = userId
     socket.emit('join-room', 1, userId)
+    streamMedia()
 })
 
 myPeer.on('call', call => {
@@ -65,10 +66,12 @@ myPeer.on('call', call => {
     call.on('close', () => { existingUserVideo.remove() })
 })
 
-navigator.mediaDevices.getUserMedia({ video: true, audio: true }).then(stream => {
-    myStream = stream
-    addVideoStream(userVideo, stream, myId)
-})
+var streamMedia = () => {
+    navigator.mediaDevices.getUserMedia({ video: true, audio: true }).then(stream => {
+        myStream = stream
+        addVideoStream(userVideo, stream, myId)
+    })
+}
 
 socket.on('user-connected', connectedUserId => {
     const call = myPeer.call(connectedUserId, myStream)
