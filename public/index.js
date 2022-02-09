@@ -41,7 +41,7 @@ const myPeer = new Peer({
 })
 
 // Global variables 
-let getUserMedia = navigator.mediaDevices.getUserMedia || navigator.mediaDevices.webkitGetUserMedia || navigator.mediaDevices.mozGetUserMedia
+// let getUserMedia = navigator.mediaDevices.getUserMedia || navigator.mediaDevices.webkitGetUserMedia || navigator.mediaDevices.mozGetUserMedia
 let myName, myId, myStream
 const videoGrid = document.querySelector('#video-grid')
 const userVideo = createVid(); userVideo.muted = true
@@ -65,7 +65,7 @@ myPeer.on('call', call => {
     call.on('close', () => { existingUserVideo.remove() })
 })
 
-getUserMedia({ video: true, audio: true }).then(stream => {
+navigator.mediaDevices.getUserMedia({ video: true, audio: true }).then(stream => {
     myStream = stream
     addVideoStream(userVideo, stream, myId)
 })
