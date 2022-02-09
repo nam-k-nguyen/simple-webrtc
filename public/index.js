@@ -52,7 +52,6 @@ const peers = {}
 myPeer.on('open', userId => {
     myId = userId
     socket.emit('join-room', 1, userId)
-    streamMedia()
 })
 
 myPeer.on('call', call => {
@@ -66,12 +65,11 @@ myPeer.on('call', call => {
     call.on('close', () => { existingUserVideo.remove() })
 })
 
-var streamMedia = () => {
-    navigator.mediaDevices.getUserMedia({ video: true, audio: true }).then(stream => {
-        myStream = stream
-        addVideoStream(userVideo, stream, myId)
-    })
-}
+navigator.mediaDevices.getUserMedia({ video: true, audio: true }).then(stream => {
+    myStream = stream
+    addVideoStream(userVideo, stream, myId)
+})
+
 
 socket.on('user-connected', connectedUserId => {
     const call = myPeer.call(connectedUserId, myStream)
